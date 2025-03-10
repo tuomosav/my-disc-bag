@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Disclist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+</head>
+<body>
+    <div class="container">
+        <div class="col-md-4">
+	<h1>Discs</h1>
+        </div>
+        <div class="col-md-4">
+            <span  sec:authentication="name">Name</span>
+            
+        </div>
+        <div class="col-md-4" style="padding:20px 0">
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Log Out" class="btn btn-sm btn-danger"/>
+            </form>
+        </div>
+    <table class="table table-striped">
+		<tr>
+		    <th>Name</th>
+		    <th>Manufacturer</th>
+            <th>Plastic</th>
+            <th>Weight</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th sec:authorize="hasAuthority('ADMIN')"> </th>
+		</tr>  
+    	<tr th:each = "disc : ${discs}">
+    		<td th:text="${disc.name}"></td>
+    		<td th:text="${disc.manufacturer}"></td>
+            <td th:text="${disc.plastic}"></td>
+            <td th:text="${disc.weight}"></td>
+            <td th:text="${disc.price}"></td>
+            <td th:text="${disc.category.name}"></td>
+ 				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${disc.id})}" class="btn btn-danger">Delete</a></td>
+                <td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/edit/{id}(id=${disc.id})}">Edit</a></td>
+    	</tr>
+     </table>
+	 <td sec:authorize="hasAuthority('ADMIN')"><a href="/add-disc" class="btn btn-success">Add Disc</a></td>    	
+</body>
+</html>

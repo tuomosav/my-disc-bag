@@ -1,5 +1,11 @@
 package mdb_k25.my_disc_bag.domain;
 
-public class CategoryRepository {
+import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface CategoryRepository extends CrudRepository<Category, Long> {
+
+    List<Category> findByName(String name);
 
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Disc Bag</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Edit Disc data</h1>
+	<div>
+		<form th:object="${disc}" th:action="@{../save}" action="#" method="post">
+			<input type="hidden" id="id" th:field="*{id}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+            <label for="name">Name</label>
+            <input type="text" id="name" th:field="*{name}" />
+            <div style="clear: both; display: block; height: 10px;"></div>
+            <label for="manufacturer">Manufacturer</label>
+			<input type="text" id="manufacturer" th:field="*{manufacturer}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+		  	<label for="plastic">Plastic</label>
+			<input type="text" th:field="*{plastic}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+            <label for="weight">Weight</label>
+            <input type="text" th:field="*{weight}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+            <label for="price">Price</label>
+            <input type="text" th:field="*{price}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+
+			<label for="catlist">Category</label>
+			<select id="catlist" th:field="*{category}">
+				<option th:each="category: ${categories}" th:value="${category.categoryid}" th:text="${category.name}"></option>
+			</select>
+
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<input type="submit" value="Save"></input>
+		</form>
+	</div>
+</body>
+</html>
