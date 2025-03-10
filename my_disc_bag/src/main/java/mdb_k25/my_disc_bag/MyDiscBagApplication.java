@@ -31,12 +31,8 @@ public class MyDiscBagApplication {
 
 			if (crepository.count() == 0 && repository.count() == 0 && aurepository.count() == 0) {
 			Category category1 = new Category("Putter");
-			Category category2 = new Category("Midrange");
-			Category category3 = new Category("Driver");
 
 			crepository.save(category1);
-			crepository.save(category2);
-			crepository.save(category3);
 	
 			repository.save(new Disc("Judge", "Dynamic Discs", "Classic Blend", 175, 12.90, category1, false));
 
