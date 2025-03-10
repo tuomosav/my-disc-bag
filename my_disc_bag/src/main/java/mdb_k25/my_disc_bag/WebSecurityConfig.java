@@ -29,9 +29,11 @@ public class WebSecurityConfig {
         @Bean
         public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
-            http.authorizeHttpRequests(
-                authorize -> authorize
+            http
+            .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(antMatcher("/css/**")).permitAll()
+                .requestMatchers(antMatcher("/register")).permitAll()
+                .requestMatchers(antMatcher("/saveuser")).permitAll()
                 .requestMatchers(WHITE_LIST_URLS).permitAll()
                 .anyRequest().authenticated())
                 .headers(headers ->

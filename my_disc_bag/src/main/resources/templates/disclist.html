@@ -9,11 +9,11 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <body>
     <div class="container">
         <div class="col-md-4">
-	<h1>Discs</h1>
+	    <h1>Discs</h1>
         </div>
         <div class="col-md-4">
-            <span  sec:authentication="name">Name</span>
-            
+            <i>Welcome </i><b sec:authentication="name"></b>,
+            your role is <b sec:authentication="principal.authorities"></b>
         </div>
         <div class="col-md-4" style="padding:20px 0">
             <form th:action="@{/logout}" method="post">
