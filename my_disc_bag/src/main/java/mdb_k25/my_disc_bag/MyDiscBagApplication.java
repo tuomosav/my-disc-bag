@@ -37,8 +37,8 @@ public class MyDiscBagApplication {
 			repository.save(new Disc("Judge", "Dynamic Discs", "Classic Blend", 175, 12.90, category1, false));
 
 			//Luodaan käyttäjiä: admin/admin , user/user
-			AppUser user1 = new AppUser("user", "$2a$10$myvtgbh8XXeQISLXD/qKf.V1RhkX2aWi/MeFbmli.h6rxQQwgvtpy", "user@email.com", "USER");
-			AppUser user2 = new AppUser("admin", "$2a$10$/6t0t59glyl56NbvbJrb7OR9rgFjnwO5pyoj7.gNUFKKQDS3wKe9W", "admin@email.com", "ADMIN");
+			AppUser user1 = new AppUser("user", "$2a$10$myvtgbh8XXeQISLXD/qKf.V1RhkX2aWi/MeFbmli.h6rxQQwgvtpy", "USER");
+			AppUser user2 = new AppUser("admin", "$2a$10$/6t0t59glyl56NbvbJrb7OR9rgFjnwO5pyoj7.gNUFKKQDS3wKe9W", "ADMIN");
 			aurepository.save(user1);
 			aurepository.save(user2);
 			}
