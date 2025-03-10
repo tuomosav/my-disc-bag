@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
-
-import org.springframework.web.bind.annotation.PostMapping;
 
 import mdb_k25.my_disc_bag.domain.DiscRepository;
 import mdb_k25.my_disc_bag.domain.CategoryRepository;
@@ -45,7 +43,6 @@ public class DiscController {
     }
     
     //Add new disc
-    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/add-disc")
     public String addDisc(Model model) {
         model.addAttribute("disc", new Disc());

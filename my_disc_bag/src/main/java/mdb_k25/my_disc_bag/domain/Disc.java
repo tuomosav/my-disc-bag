@@ -12,6 +12,7 @@ public class Disc {
     private String manufacturer, plastic;
     private int weight;
     private double price;
+    private boolean lost;
 
     @NotEmpty(message = "Disc's name can't be empty.")
     @Size(min = 2, max = 250)
@@ -25,7 +26,7 @@ public class Disc {
     public Disc() {
     }
 
-    public Disc(String name, String manufacturer, String plastic, int weight, double price, Category category) {
+    public Disc(String name, String manufacturer, String plastic, int weight, double price, Category category, boolean lost) {
         super();
         this.name = name;
         this.manufacturer = manufacturer;
@@ -33,6 +34,7 @@ public class Disc {
         this.weight = weight;
         this.price = price;
         this.category = category;
+        this.lost = lost;
     }
 
     public Long getId() {
@@ -91,14 +93,21 @@ public class Disc {
         this.category = category;
     }
 
+    public boolean isLost() {
+        return lost;
+    }
+
+    public void setLost(boolean lost) {
+        this.lost = lost;
+    }
+
     @Override
     public String toString() {
         if (this.category != null)
             return "Disc [id=" + id + ", name=" + name + ", manufacturer=" + manufacturer + ", plastic=" + plastic + ", weight="
-                + weight + ", price=" + price + ", category=" + this.getCategory() + "]";
+                + weight + ", price=" + price + ", category=" + this.getCategory() + ", lost=" + lost + "]";
         else
             return "Disc [id=" + id + ", name=" + name + ", manufacturer=" + manufacturer + ", plastic=" + plastic + ", weight="
-                + weight + ", price=" + price + "]";
+                + weight + ", price=" + price + ", lost=" + lost + "]";
     }
-
 }

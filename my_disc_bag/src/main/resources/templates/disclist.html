@@ -28,6 +28,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
             <th>Weight</th>
             <th>Price</th>
             <th>Category</th>
+            <th>Lost Disc</th>
             <th sec:authorize="hasAuthority('ADMIN')"> </th>
 		</tr>  
     	<tr th:each = "disc : ${discs}">
@@ -37,10 +38,11 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
             <td th:text="${disc.weight}"></td>
             <td th:text="${disc.price}"></td>
             <td th:text="${disc.category.name}"></td>
+            <td th:text="${disc.lost ? 'Lost' : ''}"></td>
  				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${disc.id})}" class="btn btn-danger">Delete</a></td>
                 <td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/edit/{id}(id=${disc.id})}">Edit</a></td>
     	</tr>
      </table>
-	 <td sec:authorize="hasAuthority('ADMIN')"><a href="/add-disc" class="btn btn-success">Add Disc</a></td>    	
+	 <td><a href="/add-disc" class="btn btn-success">Add Disc</a></td>    	
 </body>
 </html>

@@ -27,14 +27,18 @@ public class MyDiscBagApplication {
 	@Bean
 	public CommandLineRunner myDiscBag(DiscRepository repository, CategoryRepository crepository, AppUserRepository aurepository) {
 		return (args) -> {
-			log.info("save one disc and category for a test, creating users");
+			log.info("save one disc and disc categories for a test, creating users");
 
 			if (crepository.count() == 0 && repository.count() == 0 && aurepository.count() == 0) {
 			Category category1 = new Category("Putter");
+			Category category2 = new Category("Midrange");
+			Category category3 = new Category("Driver");
 
 			crepository.save(category1);
+			crepository.save(category2);
+			crepository.save(category3);
 	
-			repository.save(new Disc("Judge", "Dynamic Discs", "Classic Blend", 175, 12.90, category1));
+			repository.save(new Disc("Judge", "Dynamic Discs", "Classic Blend", 175, 12.90, category1, false));
 
 			//Luodaan käyttäjiä: admin/admin , user/user
 			AppUser user1 = new AppUser("user", "$2a$10$myvtgbh8XXeQISLXD/qKf.V1RhkX2aWi/MeFbmli.h6rxQQwgvtpy", "user@email.com", "USER");
