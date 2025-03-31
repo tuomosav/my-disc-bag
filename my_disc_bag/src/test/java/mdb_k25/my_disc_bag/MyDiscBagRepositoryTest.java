@@ -36,7 +36,7 @@ public class MyDiscBagRepositoryTest {
     public void createNewDisc() {
         Category category = new Category("Approach discs");
         crepository.save(category);
-        Disc disc = new Disc("Omega AP", "Millenium Discs", "Champion", 180, 15.90, category, false);
+        Disc disc = new Disc("Omega AP", "Millenium Discs", "Millenium", 180, 2, 3, 0, 0, 15.90, category, false);
         repository.save(disc);
         assertThat(disc.getId()).isNotNull();
     }

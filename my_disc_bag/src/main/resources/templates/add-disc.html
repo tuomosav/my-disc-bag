@@ -22,6 +22,19 @@
 			<div style="clear: both; display: block; height: 10px;"></div>
             <label for="weight">Weight</label>
             <input type="text" th:field="*{weight}" class="form-control"/>
+			<div th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}">Error</div>
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="speed">Speed</label>
+			<input type="text" id="speed" th:field="*{speed}" class="form-control"/>
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="glide">Glide</label>
+			<input type="text" id="glide" th:field="*{glide}" class="form-control"/>
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="turn">Turn</label>
+			<input type="text" id="turn" th:field="*{turn}" class="form-control"/>
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="fade">Fade</label>
+			<input type="text" id="fade" th:field="*{fade}" class="form-control"/>
 			<div style="clear: both; display: block; height: 10px;"></div>
             <label for="price">Price</label>
             <input type="text" th:field="*{price}" class="form-control"/>
