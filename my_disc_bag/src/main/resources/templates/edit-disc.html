@@ -3,53 +3,56 @@
 <head>
     <title>My Disc Bag</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
 </head>
 <body>
-	<h1>Edit Disc data</h1>
-	<div>
-		<form th:object="${disc}" th:action="@{../save}" action="#" method="post">
-			<input type="hidden" id="id" th:field="*{id}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-            <label for="name">Name</label>
-            <input type="text" id="name" th:field="*{name}" />
-            <div style="clear: both; display: block; height: 10px;"></div>
-            <label for="manufacturer">Manufacturer</label>
-			<input type="text" id="manufacturer" th:field="*{manufacturer}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-		  	<label for="plastic">Plastic</label>
-			<input type="text" th:field="*{plastic}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-            <label for="weight">Weight</label>
-            <input type="text" th:field="*{weight}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="speed">Speed</label>
-            <input type="text" th:field="*{speed}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="glide">Glide</label>
-            <input type="text" th:field="*{glide}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="turn">Turn</label>
-            <input type="text" th:field="*{turn}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="fade">Fade</label>
-            <input type="text" th:field="*{fade}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-            <label for="price">Price</label>
-            <input type="text" th:field="*{price}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
+    <div class="container">
+        <h1>Edit Disc</h1>
+        <div class="col-md-6">
+            <form th:object="${disc}" th:action="@{/save}" method="post">
+                <input type="hidden" id="id" th:field="*{id}" />
+                
+                <label for="name">Name</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control"/>
+                
+                <label for="manufacturer">Manufacturer</label>
+                <input type="text" id="manufacturer" th:field="*{manufacturer}" class="form-control"/>
+                
+                <label for="plastic">Plastic</label>
+                <input type="text" th:field="*{plastic}" class="form-control"/>
 
-			<label for="catlist">Category</label>
-			<select id="catlist" th:field="*{category}">
-				<option th:each="category: ${categories}" th:value="${category.categoryid}" th:text="${category.name}"></option>
-			</select>
-			<div style="clear: both; display: block; height: 10px;"></div>
-			
-			<label for="lost">Lost Disc</label>
-			<input type="checkbox" id="lost" name="lost">
+                <label for="weight">Weight</label>
+                <input type="text" th:field="*{weight}" class="form-control"/>
 
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<input type="submit" value="Save"></input>
-		</form>
-	</div>
+                <label for="speed">Speed</label>
+                <input type="text" th:field="*{speed}" class="form-control"/>
+
+                <label for="glide">Glide</label>
+                <input type="text" th:field="*{glide}" class="form-control"/>
+
+                <label for="turn">Turn</label>
+                <input type="text" th:field="*{turn}" class="form-control"/>
+
+                <label for="fade">Fade</label>
+                <input type="text" th:field="*{fade}" class="form-control"/>
+
+                <label for="price">Price</label>
+                <input type="text" th:field="*{price}" class="form-control"/>
+
+                <label for="catlist">Category</label>
+                <select id="catlist" th:field="*{category}" class="form-control">
+                    <option th:each="category: ${categories}" th:value="${category.categoryid}" th:text="${category.name}"></option>
+                </select>
+
+                <div class="form-check">
+                    <input type="checkbox" id="lost" th:field="*{lost}" class="form-check-input"/>
+                    <label for="lost" class="form-check-label">Lost Disc</label>
+                </div>
+
+                <br>
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

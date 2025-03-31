@@ -29,10 +29,14 @@ public class Disc {
     @JoinColumn(name = "categoryid")
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private AppUser user;
+
     public Disc() {
     }
 
-    public Disc(String name, String manufacturer, String plastic, int weight, int speed, int glide, int turn, int fade, double price, Category category, boolean lost) {
+    public Disc(String name, String manufacturer, String plastic, int weight, int speed, int glide, int turn, int fade, double price, Category category, boolean lost, AppUser user) {
         super();
         this.name = name;
         this.manufacturer = manufacturer;
@@ -45,6 +49,7 @@ public class Disc {
         this.price = price;
         this.category = category;
         this.lost = lost;
+        this.user = user;
     }
 
     public Long getId() {
@@ -143,14 +148,22 @@ public class Disc {
         this.lost = lost;
     }
 
+    public AppUser getUser() {
+        return user;
+    }
+
+    public void setUser(AppUser user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         if (this.category != null)
             return "Disc [id=" + id + ", name=" + name + ", manufacturer=" + manufacturer + ", plastic=" + plastic + ", weight="
                 + weight + ", speed=" + speed + ", glide=" + glide + ", turn=" + turn + ", fade=" + fade 
-                + ", price=" + price + ", category=" + this.getCategory() + ", lost=" + lost + "]";
+                + ", price=" + price + ", category=" + this.getCategory() + ", lost=" + lost + ", user=" + user + "]";
         else
             return "Disc [id=" + id + ", name=" + name + ", manufacturer=" + manufacturer + ", plastic=" + plastic + ", weight="
-                + weight + ", speed=" + speed + ", glide=" + glide + ", turn=" + turn + ", fade=" + fade + ", price=" + price + ", lost=" + lost + "]";
+                + weight + ", speed=" + speed + ", glide=" + glide + ", turn=" + turn + ", fade=" + fade + ", price=" + price + ", lost=" + lost + ", user=" + user + "]";
     }
 }

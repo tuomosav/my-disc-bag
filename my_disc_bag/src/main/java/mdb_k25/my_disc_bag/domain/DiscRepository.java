@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 public interface DiscRepository extends CrudRepository<Disc, Long> {
 
     List<Disc> findByName(String name);
+    List<Disc> findDiscByCategoryNameAndUser(String name, AppUser user);
     List<Disc> findDiscByCategoryName(String name);
+    List<Disc> findByUser(AppUser user);
 
 }

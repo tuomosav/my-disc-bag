@@ -33,14 +33,15 @@ public class MyDiscBagApplication {
 			Category category1 = new Category("Putter");
 
 			crepository.save(category1);
-	
-			repository.save(new Disc("Judge", "Dynamic Discs", "Classic Blend", 175, 2, 4, 0, 1, 12.90, category1, false));
 
 			//Luodaan käyttäjiä: admin/admin , user/user
 			AppUser user1 = new AppUser("user", "$2a$10$myvtgbh8XXeQISLXD/qKf.V1RhkX2aWi/MeFbmli.h6rxQQwgvtpy", "USER");
 			AppUser user2 = new AppUser("admin", "$2a$10$/6t0t59glyl56NbvbJrb7OR9rgFjnwO5pyoj7.gNUFKKQDS3wKe9W", "ADMIN");
 			aurepository.save(user1);
 			aurepository.save(user2);
+	
+			repository.save(new Disc("Judge", "Dynamic Discs", "Classic Blend", 175, 2, 4, 0, 1, 12.90, category1, false, user2));
+
 			}
 			
 			log.info("fetch all discs");

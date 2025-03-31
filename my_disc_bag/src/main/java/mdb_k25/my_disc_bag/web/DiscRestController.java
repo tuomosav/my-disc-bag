@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mdb_k25.my_disc_bag.domain.Disc;
 import mdb_k25.my_disc_bag.domain.DiscRepository;
+import mdb_k25.my_disc_bag.domain.AppUser;
+import mdb_k25.my_disc_bag.domain.AppUserRepository;
 import mdb_k25.my_disc_bag.domain.CategoryRepository;
 
 
@@ -25,54 +30,103 @@ public class DiscRestController {
 
     private final DiscRepository discRepository;
     private CategoryRepository cRepository;
+    private AppUserRepository auRepository;
 
-    public DiscRestController(DiscRepository discRepository, CategoryRepository cRepository) {
+    public DiscRestController(DiscRepository discRepository, CategoryRepository cRepository, AppUserRepository auRepository) {
         this.discRepository = discRepository;
         this.cRepository = cRepository;
+        this.auRepository = auRepository;
     }
     
     //Return list of discs
     @GetMapping("/discs")
-    public Iterable<Disc> getDiscs() {
-        log.info("Fetch and return discs");
-        return discRepository.findAll();
+    public List<Disc> getDiscs(@AuthenticationPrincipal AppUser user) {
+    log.info("Fetch and return discs for user: " + user.getUsername());
+    if (user.getRole().equals("ADMIN")) {
+        return (List<Disc>) discRepository.findAll();  // Admin sees all discs
+    } else {
+        return discRepository.findByUser(user);  // Users see only their own discs
     }
+}
     
     //Add new disc
     @PostMapping("discs")
-    Disc newDisc(@RequestBody Disc newDisc) {
-        log.info("Save new disc " + newDisc);
+    Disc newDisc(@RequestBody Disc newDisc, @AuthenticationPrincipal AppUser user) {
+        log.info("User " + user.getUsername() + " adds a new disc.");
+        newDisc.setUser(user);
         return discRepository.save(newDisc);
     }
     
     //Edit existing disc's information
     @PutMapping("discs/{id}")
-    Disc editDisc(@RequestBody Disc editedDisc, @PathVariable Long id) {
-        log.info("Edit disc " + editedDisc);
-        editedDisc.setId(id);
-        return discRepository.save(editedDisc);
+    public ResponseEntity<?> editDisc(@RequestBody Disc editedDisc, @PathVariable Long id, @AuthenticationPrincipal AppUser user) {
+    Optional<Disc> discOptional = discRepository.findById(id);
+    
+    if (discOptional.isEmpty()) {
+        return ResponseEntity.notFound().build();
     }
+
+    Disc existingDisc = discOptional.get();
+
+    if (!user.getRole().equals("ADMIN") && !existingDisc.getUser().equals(user)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only edit your own discs.");
+    }
+
+    log.info("User " + user.getUsername() + " edits disc with ID: " + id);
+    editedDisc.setId(id);
+    editedDisc.setUser(existingDisc.getUser()); // Preserve the original owner
+    return ResponseEntity.ok(discRepository.save(editedDisc));
+}
 
     //Delete existing disc
     @DeleteMapping("/discs/{id}")
-    public Iterable<Disc> deleteDisc(@PathVariable Long id) {
-        log.info("Delete disc, id = " + id);
+    public ResponseEntity<?> deleteDisc(@PathVariable Long id, @AuthenticationPrincipal AppUser user) {
+        Optional<Disc> discOptional = discRepository.findById(id);
+    
+        if (discOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+    
+        Disc disc = discOptional.get();
+    
+        if (!user.getRole().equals("ADMIN") && !disc.getUser().equals(user)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only delete your own discs.");
+        }
+    
+        log.info("User " + user.getUsername() + " deletes disc with ID: " + id);
         discRepository.deleteById(id);
-        return discRepository.findAll();
+        return ResponseEntity.ok("Disc deleted successfully");
     }
 
     //Find one disc and return it
     @GetMapping("/discs/{id}")
-    Optional<Disc> getDisc(@PathVariable Long id) {
-        log.info("Find disc, id = " + id);
-        return discRepository.findById(id);
+    public ResponseEntity<?> getDisc(@PathVariable Long id, @AuthenticationPrincipal AppUser user) {
+        Optional<Disc> discOptional = discRepository.findById(id);
+    
+        if (discOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+    
+        Disc disc = discOptional.get();
+    
+        if (!user.getRole().equals("ADMIN") && !disc.getUser().equals(user)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only view your own discs.");
+        }
+    
+        log.info("User " + user.getUsername() + " accesses disc with ID: " + id);
+        return ResponseEntity.ok(disc);
     }
     
     //Find disc by category
     @GetMapping("/discs/category/{name}")
-    List<Disc> getDiscByCategoryName(@PathVariable String name) {
-        log.info("Find disc, category = " + name);
-        return discRepository.findDiscByCategoryName(name);
+    public List<Disc> getDiscByCategoryName(@PathVariable String name, @AuthenticationPrincipal AppUser user) {
+        log.info("User " + user.getUsername() + " searches discs by category: " + name);
+        
+        if (user.getRole().equals("ADMIN")) {
+            return discRepository.findDiscByCategoryName(name);
+        } else {
+            return discRepository.findDiscByCategoryNameAndUser(name, user);
+        }
     }
     
 }

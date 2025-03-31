@@ -47,10 +47,13 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
             <td th:text="${disc.price}"></td>
             <td th:text="${disc.category.name}"></td>
             <td th:text="${disc.lost ? 'Lost' : ''}"></td>
- 				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${disc.id})}" class="btn btn-danger">Delete</a></td>
-                <td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/edit/{id}(id=${disc.id})}">Edit</a></td>
+            <td th:if="${disc.user != null and (#authentication.principal.username == disc.user.username or #authorization.expression('hasAuthority(''ROLE_ADMIN'')'))}">
+                <a th:href="@{/edit/{id}(id=${disc.id})}" class="btn btn-primary">Edit</a>
+                <a th:href="@{/delete/{id}(id=${disc.id})}" class="btn btn-danger">Delete</a>
+            </td>
     	</tr>
      </table>
-	 <td><a href="/add-disc" class="btn btn-success">Add Disc</a></td>    	
+     <td sec:authorize="isAuthenticated()">
+	 <a href="/add-disc" class="btn btn-success">Add Disc</a></td>    	
 </body>
 </html>

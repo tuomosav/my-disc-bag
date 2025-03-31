@@ -6,40 +6,54 @@
 	<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
 </head>
 <body>
+	<div sec:authorize="isAuthenticated()">
 	<div class="container">
+		<div class=""col-md-4>
 	<h1>Add a Disc</h1>
-	<div class="col-md-4">
+
+	<!--Success Message for added disc -->
+	<div th:if="${successMessage}" class="alert alert-success">
+		<p th:text="${successMessage}"></p>
+	</div>
 		<form th:object="${disc}" th:action="@{save}" action="#" method="post">
 			<label for="name">Name</label>
 			<input type="text" id="name" th:field="*{name}" class="form-control"/>
 			<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
 		  	<label for="manufacturer">Manufacturer</label>
 			<input type="text" id="manufacturer" th:field="*{manufacturer}" class="form-control"/>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
 		  	<label for="plastic">Plastic</label>
 			<input type="text" id="plastic" th:field="*{plastic}" class="form-control"/>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
             <label for="weight">Weight</label>
             <input type="text" th:field="*{weight}" class="form-control"/>
 			<div th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}">Error</div>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
 			<label for="speed">Speed</label>
 			<input type="text" id="speed" th:field="*{speed}" class="form-control"/>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
 			<label for="glide">Glide</label>
 			<input type="text" id="glide" th:field="*{glide}" class="form-control"/>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
 			<label for="turn">Turn</label>
 			<input type="text" id="turn" th:field="*{turn}" class="form-control"/>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
 			<label for="fade">Fade</label>
 			<input type="text" id="fade" th:field="*{fade}" class="form-control"/>
+
 			<div style="clear: both; display: block; height: 10px;"></div>
             <label for="price">Price</label>
             <input type="text" th:field="*{price}" class="form-control"/>
-			<div style="clear: both; display: block; height: 10px;"></div>
 
+			<div style="clear: both; display: block; height: 10px;"></div>
 			<label for="catlist">Category</label>
 			<select id="catlist" th:field="*{category}" class="form-control">
 				<option th:each="category: ${categories}" th:value="${category.categoryid}" th:text="${category.name}"></option>
@@ -50,5 +64,11 @@
 		</form>
 		</div>
 	</div>
+	</div>
+
+	<!-- Message for guests (not logged in) -->
+<div sec:authorize="!isAuthenticated()">
+    <h2>You must be logged in to add a disc.</h2>
+</div>
 </body>
 </html>

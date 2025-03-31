@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -34,14 +35,16 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(antMatcher("/css/**")).permitAll()
                 .requestMatchers(antMatcher("/register")).permitAll()
+                .requestMatchers(antMatcher("/login")).permitAll()
                 .requestMatchers(antMatcher("/saveuser")).permitAll()
+                .requestMatchers("/edit/**", "/delete/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers("/discs", "/discs/**").authenticated()
+                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(WHITE_LIST_URLS).permitAll()
                 .anyRequest().authenticated())
-                .headers(headers ->
-                headers.frameOptions(frameOptions -> frameOptions
-                    .disable()))
-                .formLogin(formLogin ->
-                    formLogin.loginPage("/login")
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
+                .formLogin(formLogin -> formLogin
+                    .loginPage("/login")
                     .defaultSuccessUrl("/disclist", true)
                     .permitAll())
                 .logout(logout -> logout.permitAll())
@@ -50,6 +53,11 @@ public class WebSecurityConfig {
                 
 
             return http.build();
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
         }
 
         @Autowired
