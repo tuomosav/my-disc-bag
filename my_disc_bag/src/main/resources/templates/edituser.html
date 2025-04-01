@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h2>Edit User</h2>
+    <form th:action="@{/admin/updateuser}" th:object="${user}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" th:field="*{username}" required />
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Role</label>
+            <select class="form-control" th:field="*{role}">
+                <option value="USER">User</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="/admin/users" class="btn btn-secondary">Cancel</a>
+    </form>
+</body>
+</html>

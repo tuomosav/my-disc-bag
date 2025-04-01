@@ -4,15 +4,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.*;
 
 import mdb_k25.my_disc_bag.domain.RegisterForm;
 import mdb_k25.my_disc_bag.domain.AppUser;
 import mdb_k25.my_disc_bag.domain.AppUserRepository;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -23,7 +22,7 @@ public class UserController {
 	}
 	
     @RequestMapping(value = "register")
-    public String addDisc(Model model){
+    public String addUser(Model model){
     	model.addAttribute("registerform", new RegisterForm());
         return "register";
     }	
@@ -59,5 +58,54 @@ public class UserController {
     		return "register";
     	}
     	return "redirect:/login";    	
-    }    
+    }
+
+	// List all users (admin!)
+    @GetMapping("/admin/users")
+    public String listUsers(Model model) {
+        model.addAttribute("users", repository.findAll());
+        return "userlist";
+    }
+
+	// Delete user by id (admin!)
+    @GetMapping("/admin/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        repository.deleteById(id);
+        return "redirect:/admin/users";
+    }
+
+	// Show edit form for user (admin!)
+    @GetMapping("/admin/edit/{id}")
+    public String editUser(@PathVariable("id") Long id, Model model) {
+        Optional<AppUser> user = repository.findById(id);
+        if (user.isPresent()) {
+            model.addAttribute("user", user.get());
+            return "edituser";
+        }
+        return "redirect:/admin/users";
+    }
+
+	// Save edited user details (admin!)
+    @PostMapping("/admin/updateuser")
+    public String updateUser(@Valid @ModelAttribute("user") AppUser user, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "editUser"; // Returning to edit form if validation fails
+		}
+	
+		AppUser existingUser = repository.findById(user.getId()).orElse(null);
+		if (existingUser != null) {
+			// Preserve existing password if no new password is provided
+			user.setPasswordHash(existingUser.getPassword());
+	
+			// Save the updated user
+			repository.save(user);
+		}
+	
+		return "redirect:/admin/users";
+	}
+
+	@RequestMapping("/userlist")
+	public String redirectToAdminUsers() {
+    	return "redirect:/admin/users";
+	}
 }

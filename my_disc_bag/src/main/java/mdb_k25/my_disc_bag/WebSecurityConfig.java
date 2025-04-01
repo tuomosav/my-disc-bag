@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import mdb_k25.my_disc_bag.web.CustomAccessDeniedHandler;
+
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
@@ -24,6 +26,9 @@ public class WebSecurityConfig {
     public WebSecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
+
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
 
     private static final AntPathRequestMatcher[] WHITE_LIST_URLS = {
         new AntPathRequestMatcher("/api/discs**")};
@@ -37,21 +42,25 @@ public class WebSecurityConfig {
                 .requestMatchers(antMatcher("/register")).permitAll()
                 .requestMatchers(antMatcher("/login")).permitAll()
                 .requestMatchers(antMatcher("/saveuser")).permitAll()
-                .requestMatchers("/edit/**", "/delete/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers("/edit/**", "/delete/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/discs", "/discs/**").authenticated()
-                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers(WHITE_LIST_URLS).permitAll()
                 .anyRequest().authenticated())
+
+                .exceptionHandling(exception -> exception
+                    .accessDeniedHandler(accessDeniedHandler)) //Using custom Access Denied Handler for unauthorized users
+
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
                 .formLogin(formLogin -> formLogin
                     .loginPage("/login")
                     .defaultSuccessUrl("/disclist", true)
                     .permitAll())
+
                 .logout(logout -> logout.permitAll())
                 .httpBasic(Customizer.withDefaults()) //Postman basic auth works with this
                 .csrf(csrf -> csrf.disable());
                 
-
             return http.build();
         }
 
