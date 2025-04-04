@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import mdb_k25.my_disc_bag.domain.Disc;
 import mdb_k25.my_disc_bag.domain.DiscRepository;
 import mdb_k25.my_disc_bag.domain.AppUser;
+import mdb_k25.my_disc_bag.domain.AppUserRepository;
 import mdb_k25.my_disc_bag.domain.Category;
 import mdb_k25.my_disc_bag.domain.CategoryRepository;
 
@@ -25,6 +26,9 @@ public class MyDiscBagRepositoryTest {
     @Autowired
     private CategoryRepository crepository;
 
+    @Autowired
+    private AppUserRepository aurepository;
+
     @Test
     public void findByNameShouldReturnDisc() {
         List<Disc> discs = repository.findByName("Judge");
@@ -37,7 +41,9 @@ public class MyDiscBagRepositoryTest {
     public void createNewDisc() {
         Category category = new Category("Approach discs");
         crepository.save(category);
-        AppUser user2 = new AppUser("admin", "adminpassword", "ADMIN");
+
+        AppUser user2 = new AppUser("testadmin", "testadminpassword", "ADMIN");
+        aurepository.save(user2);
 
         Disc disc = new Disc("Omega AP", "Millenium Discs", "Millenium", 180, 2, 3, 0, 0, 15.90, category, false, user2);
         repository.save(disc);

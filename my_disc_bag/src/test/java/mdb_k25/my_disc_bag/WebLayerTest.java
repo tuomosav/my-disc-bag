@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,11 +27,13 @@ public class WebLayerTest {
     }
 
     @Test
+    @WithUserDetails("user")
     public void statusOk() throws Exception {
         mockMvc.perform(get("/discs")).andExpect(status().isOk());
     }
 
     @Test
+    @WithUserDetails("user")
     public void responseTypeApplicationJson() throws Exception {
         mockMvc.perform(get("/discs"))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
