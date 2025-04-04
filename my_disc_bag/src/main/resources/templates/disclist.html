@@ -15,10 +15,26 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
             <i>Welcome </i><b sec:authentication="name"></b>,
             your role is <b sec:authentication="principal.authorities"></b>
         </div>
-        <div class="col-md-4" style="padding:20px 0">
-            <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Log Out" class="btn btn-sm btn-danger"/>
-            </form>
+        <div class="col-md-12 d-flex justify-content-between align-items-center" style="padding:20px 0">
+            <!-- Left Side for "Log Out" and "User Management" buttons -->
+            <div>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <input type="submit" value="Log Out" class="btn btn-sm btn-danger"/>
+                </form>
+                <a sec:authorize="hasAuthority('ROLE_ADMIN')" href="/admin/users" class="btn btn-sm btn-warning">User Management</a>
+            </div>
+        
+            <!-- Right Side for "Show All" and "Show Lost" buttons -->
+            <div class="d-inline-flex gap-2">
+                <form action="/disclist" method="get" style="display: inline;">
+                    <button type="submit" class="btn btn-sm btn-primary">Show All Discs</button>
+                </form>
+                
+                <form action="/disclist" method="get" style="display: inline;">
+                    <input type="hidden" name="lost" value="true">
+                    <button type="submit" class="btn btn-sm btn-info">Show Lost Discs</button>
+                </form>
+            </div>
         </div>
     <table class="table table-striped">
 		<tr>
@@ -33,6 +49,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
             <th>Price</th>
             <th>Category</th>
             <th>Lost Disc</th>
+            <th>Actions</th>
             <th sec:authorize="hasAuthority('ADMIN')"> </th>
 		</tr>  
     	<tr th:each = "disc : ${discs}">

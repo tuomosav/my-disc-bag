@@ -10,5 +10,7 @@ public interface DiscRepository extends CrudRepository<Disc, Long> {
     List<Disc> findDiscByCategoryNameAndUser(String name, AppUser user);
     List<Disc> findDiscByCategoryName(String name);
     List<Disc> findByUser(AppUser user);
+    List<Disc> findByUserAndLostTrue(AppUser user);
+    List<Disc> findByLostTrue();
 
 }

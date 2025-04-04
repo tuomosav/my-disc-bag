@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -45,7 +46,7 @@ public class DiscController {
     
     //Show all discs based on role
     @GetMapping("/disclist")
-public String discList(Model model, @AuthenticationPrincipal AppUser user) {
+public String discList(@RequestParam(name = "lost", required = false) Boolean lost, Model model, @AuthenticationPrincipal AppUser user) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null) {
         System.out.println("Authentication: " + authentication.getName());
@@ -59,10 +60,20 @@ public String discList(Model model, @AuthenticationPrincipal AppUser user) {
         return "redirect:/login";
     }
     System.out.println("Authenticated user: " + user.getUsername());
+
+    //Check if user is ADMIN or USER and show discs based on that, also Show All Discs or Show Lost
     if (user.getRole().equals("ADMIN")) {
-        model.addAttribute("discs", repository.findAll());
+        if (Boolean.TRUE.equals(lost)) {
+            model.addAttribute("discs", repository.findByLostTrue()); //All lost discs for ADMIN
+        } else {
+            model.addAttribute("discs", repository.findAll()); //All discs for ADMIN
+        }
     } else {
+        if(Boolean.TRUE.equals(lost)) {
+            model.addAttribute("discs", repository.findByUserAndLostTrue(user));
+        } else {
         model.addAttribute("discs", repository.findByUser(user));
+        }
     }
     return "disclist";
 }
